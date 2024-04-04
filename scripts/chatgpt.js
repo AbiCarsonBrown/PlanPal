@@ -20,7 +20,7 @@ async function askGPT3() {
 
       {
         role: "system",
-        content: `You are a travel agent, you must provide a response in the form of JSON with the keys: destination, flight_time, expected_price, destination_average_temperature, suggested_activities. For destination_average_temperature, supply the average temperature for the destination at the specified time of year. suggested_activities should be an array with three values. Supply ${promptResponses} destinations`,
+        content: `You are a travel agent, you must provide a response in the form of JSON with the keys: destination, flight_time, expected_price, destination_average_temperature, suggested_activities. For destination_average_temperature, supply the average temperature for the destination at the specified time of year. suggested_activities should be an array with three values. Supply ${promptResponses} destinations. Do not start the response with json, content should be an array of objects`,
       },
     ],
     temperature: 1,
@@ -40,11 +40,7 @@ async function askGPT3() {
     });
     const data = await response.json();
 
-    const destinationsObj = JSON.parse(data.choices[0].message.content);
-    const destinations = Object.values(destinationsObj);
-    console.log(destinations);
-    const destinationsArr = destinations[0];
-    console.log(destinations[0]);
+    const destinationsArr = JSON.parse(data.choices[0].message.content);
     destinationsArr.forEach((destination) => {
       createDestinationCard(destination);
     });
